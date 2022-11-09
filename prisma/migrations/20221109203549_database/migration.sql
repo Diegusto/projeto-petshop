@@ -1,7 +1,7 @@
 -- CreateEnum
 CREATE TYPE "status" AS ENUM ('order', 'paid', 'pending', 'canceled');
 
--- CreateTable products
+-- CreateTable
 CREATE TABLE "products" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -12,10 +12,10 @@ CREATE TABLE "products" (
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable sales
+-- CreateTable
 CREATE TABLE "sales" (
     "id" SERIAL NOT NULL,
-    "buyerId" UUID NOT NULL,
+    "buyerId" TEXT NOT NULL,
     "productId" INTEGER NOT NULL,
     "status" "status" NOT NULL,
     "dueDate" TIMESTAMP(3) NOT NULL,
@@ -24,9 +24,9 @@ CREATE TABLE "sales" (
     CONSTRAINT "sales_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable users
+-- CreateTable
 CREATE TABLE "users" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "document" TEXT NOT NULL,
     "password" TEXT NOT NULL,

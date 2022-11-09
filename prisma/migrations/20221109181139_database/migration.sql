@@ -3,7 +3,7 @@ CREATE TYPE "status" AS ENUM ('order', 'paid', 'pending', 'canceled');
 
 -- CreateTable products
 CREATE TABLE "products" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
@@ -15,8 +15,8 @@ CREATE TABLE "products" (
 -- CreateTable sales
 CREATE TABLE "sales" (
     "id" SERIAL NOT NULL,
-    "buyerId" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
+    "buyerId" UUID NOT NULL,
+    "productId" INTEGER NOT NULL,
     "status" "status" NOT NULL,
     "dueDate" TIMESTAMP(3) NOT NULL,
     "totalValue" INTEGER NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE "sales" (
 
 -- CreateTable users
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "document" TEXT NOT NULL,
     "password" TEXT NOT NULL,

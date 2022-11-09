@@ -11,7 +11,7 @@ datasource db {
 }
 
 model products{
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
   name String 
   description String 
   price Int
@@ -29,9 +29,9 @@ enum status {
 model sales{
   id Int @id @default(autoincrement())
   user users @relation(fields: [buyerId], references: [id])
-  buyerId String @unique
+  buyerId String @unique @db.Uuid
   product products @relation(fields: [productId], references: [id])
-  productId String @unique
+  productId Int @unique
   status status
   dueDate DateTime
   totalValue Int
@@ -39,7 +39,7 @@ model sales{
 }
 
 model users{
-  id String @id @default(uuid())
+  id String @id @db.Uuid @default(uuid())
   name String 
   document String @unique
   password String

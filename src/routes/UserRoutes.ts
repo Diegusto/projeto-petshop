@@ -14,15 +14,24 @@ userRouter.post('/', async (request, response)=>{
 
     const createUserService = new CreateUserService();
 
-   const user = createUserService.execute({
-        name,
-        document,
-        email,
-        password,
-        type
-    })
+    try {
+     
+        const user = await createUserService.execute({
+            name,
+            document,
+            email,
+            password,
+            type
+        })
 
-    return response.status(200).json(user)
+        return response.status(200).json(user)
+
+    } catch (error) {
+        return response.status(400).json(error)
+    }
+
+
+    
 
 })
 

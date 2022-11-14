@@ -1,4 +1,9 @@
-import { UsersRepository } from "../repositories/usersRepository";
+import { hash } from "bcryptjs";
+
+import { users } from "@prisma/client";
+
+import { UsersRepository } from "../repositories/usersRepository"
+
 
 interface Request{
     name:string,
@@ -8,12 +13,10 @@ interface Request{
     type:string
 }
 
-interface Response{
-    name:string,
-    document:string,
-    email:string,
-    type:string
-}
+
+interface IUser extends Omit<users, 'password'> {
+    password?: string;
+  }
 
 const usersRepository = new UsersRepository()
 
@@ -24,7 +27,7 @@ class CreateUserService{
         email,
         password,
         type
-    }: Request): Promise<Response>{
+    }: Request): Promise<IUser>{
 
         const checkUserExists = await  usersRepository.FindByDocument(document)
 
@@ -33,13 +36,17 @@ class CreateUserService{
             
         }
 
-        const user: Response = await usersRepository.create({
+        const encryptedPassword = await hash(password, 10)
+
+        const user: IUser = await usersRepository.create({
             name,
             document,
             email,
-            password,
+            password:encryptedPassword,
             type
         })
+
+        delete user.password
 
         return user
     }

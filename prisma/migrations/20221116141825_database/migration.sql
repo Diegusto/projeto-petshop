@@ -8,6 +8,7 @@ CREATE TABLE "products" (
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "brand" TEXT NOT NULL,
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
@@ -35,12 +36,6 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "sales_buyerId_key" ON "sales"("buyerId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "sales_productId_key" ON "sales"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_document_key" ON "users"("document");

@@ -6,7 +6,8 @@ interface IProducts{
     name: string,
     description:string,
     price:number,
-    quantity:number
+    quantity:number,
+    brand:string
 }
 
 class ProductsRepository {
@@ -14,14 +15,16 @@ class ProductsRepository {
         name,
         description,
         price,
-        quantity
+        quantity,
+        brand
     }: IProducts): Promise<products> {
         const product = await prisma.products.create({
             data:{
                 name,
                 description,
                 price,
-                quantity
+                quantity,
+                brand
             }
         })
         return product
@@ -45,6 +48,20 @@ class ProductsRepository {
 
         return products
     }
+
+    public async ListbyBrand (brand:string): Promise<products[]>{
+        const products = await prisma.products.findMany({
+            orderBy:{
+                id: 'desc'
+            },
+            where:{
+                brand
+            }
+        })
+
+        return products
+    }
+
 
 }
 

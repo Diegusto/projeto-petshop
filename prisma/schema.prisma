@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,13 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model products{
-  id Int @id @default(autoincrement())
-  name String 
-  description String 
-  price Int
-  quantity Int
-  sale sales?
+model products {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  quantity    Int
+  brand       String
+  sale        sales[]
+}
+
+model sales {
+  id         Int      @id @default(autoincrement())
+  buyerId    String
+  productId  Int
+  status     status
+  dueDate    DateTime
+  totalValue Int
+  user       users    @relation(fields: [buyerId], references: [id])
+  product    products @relation(fields: [productId], references: [id])
+}
+
+model users {
+  id       String  @id @default(uuid())
+  name     String
+  document String  @unique
+  password String
+  type     String
+  email    String
+  sale     sales[]
 }
 
 enum status {
@@ -25,27 +44,3 @@ enum status {
   pending
   canceled
 }
-
-model sales{
-  id Int @id @default(autoincrement())
-  user users @relation(fields: [buyerId], references: [id])
-  buyerId String @unique
-  product products @relation(fields: [productId], references: [id])
-  productId Int @unique
-  status status
-  dueDate DateTime
-  totalValue Int
-  
-}
-
-model users{
-  id String @id @default(uuid())
-  name String 
-  document String @unique
-  password String
-  type String
-  email String
-  sale sales?
-}
-
-

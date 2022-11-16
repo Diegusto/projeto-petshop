@@ -4,7 +4,8 @@ interface Request{
     name: string,
     description:string,
     price:number,
-    quantity:number
+    quantity:number,
+    brand:string
 }
 
 interface Response {
@@ -12,7 +13,8 @@ interface Response {
     name: string,
     description:string,
     price:number,
-    quantity:number
+    quantity:number,
+    brand:string
 }
 
 class CreateProductService{
@@ -20,14 +22,16 @@ class CreateProductService{
         name,
         description,
         price,
-        quantity
+        quantity,
+        brand
     }: Request): Promise<Response> {
         const productsRepository = new ProductsRepository();
         const product = await productsRepository.create({
             name,
             description,
             price,
-            quantity
+            quantity,
+            brand
         })
         return product
     }

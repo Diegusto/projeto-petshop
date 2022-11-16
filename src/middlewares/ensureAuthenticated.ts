@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
+import { AppError } from "../AppError";
 
 interface ITokenPayload {
     iat: number;
@@ -16,11 +17,11 @@ function ensureAuthenticated(
     const secret = process.env.TOKEN_KEY
 
     if (!authHeader){
-        throw new Error('JWT token is missing')
+        throw new AppError('JWT token is missing',401)
     }
 
     if (!secret){
-        throw new Error('invalid token')
+        throw new AppError('invalid token',401)
     }
 
     const [, token] = authHeader.split(' ');
@@ -37,7 +38,7 @@ function ensureAuthenticated(
         return next();
 
     } catch {
-        throw new Error ('Invalid token')
+        throw new AppError ('Invalid token',401)
     }
 
 }

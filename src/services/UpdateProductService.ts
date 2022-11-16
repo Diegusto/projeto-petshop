@@ -1,4 +1,5 @@
 import { ProductsRepository } from "../repositories/productsRepository";
+import { AppError } from "../AppError";
 
 interface Request{
     productId: number,
@@ -25,7 +26,7 @@ class UpdateProductService{
 
         const findProduct = await productsRepository.FindById(productId);
         if (!findProduct){
-            throw new Error('product not found')
+            throw new AppError('product not found')
         }
 
         if (!quantity){

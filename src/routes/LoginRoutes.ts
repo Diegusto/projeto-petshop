@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UsersRepository } from "../repositories/usersRepository";
 import {sign} from "jsonwebtoken";
 import { compare } from "bcryptjs";
+import { AppError } from "../AppError";
 
 const loginRouter = Router();
 
@@ -17,20 +18,20 @@ loginRouter.post('/', async (request,response) =>{
     const findUser = await usersRepository.FindByDocument(document);
 
     if (!findUser){
-        return response.status(401).json('wrong user document')
+        throw new AppError('user not found',401)
     }
 
     const matchedPassword = await compare(password, findUser.password)
     console.log(matchedPassword)
 
     if (!matchedPassword){
-        return response.status(401).json('wrong password')
+        throw new AppError('wrong password',401)
     }
 
     const secrect = process.env.TOKEN_KEY
 
     if (!secrect){
-        return response.status(401).json('user not found')
+        throw new AppError('user not found', 401)
     }
 
     const token = sign({}, secrect, {

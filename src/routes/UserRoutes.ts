@@ -2,7 +2,10 @@ import { Router } from "express";
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { CreateUserService } from "../services/CreateUserService";
 import { UsersRepository } from "../repositories/usersRepository";
+import { AppError } from "../AppError";
 const userRouter = Router();
+
+userRouter.use(ensureAuthenticated)
 
 userRouter.post('/', async (request, response)=>{
     const {
@@ -22,11 +25,11 @@ userRouter.post('/', async (request, response)=>{
     if (findUser){
         if (!findUser.type.includes('master')){
             if (type.includes('master') || type.includes('admin')){
-                throw new Error('user type invalid')
+                throw new AppError('user type invalid')
             }
         }
     }else if (type.includes('master') || type.includes('admin')){
-        throw new Error('user type invalid')
+        throw new AppError('user type invalid')
     }
 
     const createUserService = new CreateUserService();
@@ -44,7 +47,7 @@ userRouter.post('/', async (request, response)=>{
         return response.status(200).json(user)
 
     } catch (error){
-        return response.status(400).json('user creation failed')
+        throw new AppError('user creation failed')
     }
 
 

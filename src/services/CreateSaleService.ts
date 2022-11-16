@@ -1,6 +1,7 @@
 import { SalesRepository } from "../repositories/salesRepository";
 import {ProductsRepository} from "../repositories/productsRepository";
 import { status } from "@prisma/client";
+import { AppError } from "../AppError";
 
 interface Request{
     buyerId: string,
@@ -28,7 +29,7 @@ class CreateSaleService {
         const findProduct = await productsRepository.FindById(productId);
 
         if (!findProduct){
-            throw new Error('product not found')
+            throw new AppError('product not found')
         }
 
         let status:status = 'pending'
@@ -38,7 +39,7 @@ class CreateSaleService {
         }
 
         const totalValue = (findProduct.price * quantity);
-        console.log(totalValue)
+
         const dueDate = new Date(new Date().setMonth(new Date().getMonth()+1))
 
         const salesRepository = new SalesRepository();

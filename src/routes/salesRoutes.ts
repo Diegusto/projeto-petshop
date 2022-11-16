@@ -3,6 +3,8 @@ import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { CreateSaleService } from "../services/CreateSaleService";
 import { ProductsRepository } from "../repositories/productsRepository";
 import { SalesRepository } from "../repositories/salesRepository";
+import { UsersRepository } from "../repositories/usersRepository";
+import { AppError } from "../AppError";
 
 const SalesRouter = Router()
 
@@ -29,7 +31,7 @@ SalesRouter.post('/create', async (request, response) =>{
         return response.status(200).json(sale)
 
     } catch (error) {
-        return response.status(400).json('sale creation failed')
+        throw new AppError('sale creation failed')
     }
    
 })
@@ -52,6 +54,20 @@ SalesRouter.get('/list', async (request, response) =>{
         status
     } = request.body;
 
+    const {id} = request.user
+
+    const usersRepository = new UsersRepository();
+
+    const findUser = await usersRepository.FindById(id)
+
+    if (!findUser){
+        throw new AppError('user not found')
+    }
+
+    if (!findUser.type.includes('master')){
+        throw new AppError('user not allowed', 403)
+    }
+
     const salesRepository = new SalesRepository();
 
     const sales = await salesRepository.listByStatus(status)
@@ -70,7 +86,7 @@ SalesRouter.put('/update', async (request, response) =>{
     const findSale = salesRepository.FindById(id)
 
     if (!findSale){
-        return response.status(400).json('sale not found')
+        throw new AppError('sale not found')
     }
 
     const sale = await salesRepository.UpdateStatus(id, status)

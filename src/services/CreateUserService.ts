@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 import { users } from "@prisma/client";
 
 import { UsersRepository } from "../repositories/usersRepository"
-
+import { AppError } from "../AppError";
 
 interface Request{
     name:string,
@@ -32,7 +32,7 @@ class CreateUserService{
         const checkUserExists = await  usersRepository.FindByDocument(document)
 
         if (!!checkUserExists){
-            throw new Error('user alredy exists')
+            throw new AppError('user alredy exists')
             
         }
 

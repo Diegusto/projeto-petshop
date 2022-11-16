@@ -31,6 +31,37 @@ class SalesRepository{
         })
         return sale
     }
+
+    public async listByStatus(status:status): Promise<sales[]>{
+        const sales = await prisma.sales.findMany({
+            where:{
+                status
+            }
+        })
+        return sales
+    }
+
+    public async UpdateStatus(id:number, status:status): Promise<sales>{
+        const sales = await prisma.sales.update({
+            where:{
+                id
+            },
+            data:{
+                status
+            }
+        })
+        return sales
+    }
+
+    public async FindById(id:number): Promise<sales | null>{
+        const sale = await prisma.sales.findFirst({
+            where:{
+                id
+            }
+        })
+        return sale
+    }
+
 }
 
 export {SalesRepository}

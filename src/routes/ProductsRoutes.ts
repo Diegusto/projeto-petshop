@@ -3,10 +3,14 @@ import { CreateProductService } from "../services/CreateProductService";
 import { ProductsRepository } from "../repositories/productsRepository";
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { UsersRepository } from "../repositories/usersRepository";
+import { UpdateProductService } from "../services/UpdateProductService";
+import { ensureAdmin } from "../middlewares/ensureAdmin";
 
 const ProductRouter = Router();
 
 ProductRouter.use(ensureAuthenticated)
+ProductRouter.use(ensureAdmin)
+
 const usersRepository = new UsersRepository();
 
 ProductRouter.post('/create', async (request, response) =>{
@@ -17,22 +21,6 @@ ProductRouter.post('/create', async (request, response) =>{
         quantity,
         brand
     } = request.body;
-
-    try {
-        const {id} = request.user;
-        const findUser = await usersRepository.FindById(id);
-        if (!findUser){
-            throw new Error('user not found');
-        }
-    
-    
-        if (!findUser.type.includes('admin') && !findUser.type.includes('master')){
-            throw new Error('user not allowed');
-        }
-    } catch (error) {   
-        return response.status(403).json('user not allowed')
-    }
-
     
     const createProductService = new CreateProductService();
     try {
@@ -54,20 +42,6 @@ ProductRouter.post('/create', async (request, response) =>{
 ProductRouter.get('/list', async (request, response) =>{
 
     const productsRepository = new ProductsRepository();
-    try {
-        const {id} = request.user;
-        const findUser = await usersRepository.FindById(id);
-        if (!findUser){
-            throw new Error('user not found');
-        }
-    
-    
-        if (!findUser.type.includes('admin') && !findUser.type.includes('master')){
-            throw new Error('user not allowed');
-        }
-    } catch (error) {   
-        return response.status(403).json('user not allowed')
-    }
 
     const products = await productsRepository.List();
 
@@ -76,19 +50,28 @@ ProductRouter.get('/list', async (request, response) =>{
 
 
 
-ProductRouter.get('/brand', async (request, response) =>{
+ProductRouter.put('/update', async (request, response) =>{
     const {
-        brand
+        productId,
+        quantity,
+        price
     } = request.body
 
-    const productsRepository = new ProductsRepository();
+    const updateProductService = new UpdateProductService()
 
-    const products = await productsRepository.ListbyBrand(brand);
-    
+    try {
+        const product = await updateProductService.execute({
+            productId,
+            quantity,
+            price
+        })
+        return response.status(200).json(product)
 
-    return response.status(200).json(products)
+    } catch (error) {
+        return response.status(400).json('update failed')
+    }
+
 })
-
 
 
 export {ProductRouter}

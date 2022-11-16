@@ -30,6 +30,19 @@ class ProductsRepository {
         return product
     }
 
+    public async update (id:number, quantity?:number, price?:number): Promise <products>{
+        const product = await prisma.products.update({
+            where:{
+                id
+            },
+            data:{
+                quantity,
+                price
+            }
+        })
+        return product
+    }
+
     public async FindById (id:number): Promise<products | null>{
         const product =await prisma.products.findFirst({
             where:{

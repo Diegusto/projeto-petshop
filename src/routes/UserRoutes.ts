@@ -4,8 +4,6 @@ import { CreateUserService } from "../services/CreateUserService";
 import { UsersRepository } from "../repositories/usersRepository";
 const userRouter = Router();
 
-userRouter.use(ensureAuthenticated)
-
 userRouter.post('/', async (request, response)=>{
     const {
         name,
@@ -21,14 +19,14 @@ userRouter.post('/', async (request, response)=>{
     const usersRepository = new UsersRepository();
 
     const findUser = await usersRepository.FindById(id)
-    if (!findUser){
-        throw new Error('user not found')
-    }
-
-    if (!findUser.type.includes('master')){
-        if (type.includes('master') || type.includes('admin')){
-            throw new Error('user type invalid')
+    if (findUser){
+        if (!findUser.type.includes('master')){
+            if (type.includes('master') || type.includes('admin')){
+                throw new Error('user type invalid')
+            }
         }
+    }else if (type.includes('master') || type.includes('admin')){
+        throw new Error('user type invalid')
     }
 
     const createUserService = new CreateUserService();

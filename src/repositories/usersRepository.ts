@@ -39,7 +39,16 @@ class UsersRepository {
                 document
             }
         })
-        return findUser || null
+        return findUser
+    }
+
+    public async FindById(id:string): Promise<users | null>{
+        const findUser = await prisma.users.findFirst({
+            where: {
+                id
+            }
+        })
+        return findUser
     }
 
 

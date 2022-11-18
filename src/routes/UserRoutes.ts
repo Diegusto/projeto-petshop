@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { CreateUserService } from "../services/CreateUserService";
 import { UsersRepository } from "../repositories/usersRepository";
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 const userRouter = Router();
 
 userRouter.use(ensureAuthenticated)

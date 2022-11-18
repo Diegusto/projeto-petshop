@@ -1,7 +1,7 @@
 import { SalesRepository } from "../repositories/salesRepository";
 import {ProductsRepository} from "../repositories/productsRepository";
 import { status } from "@prisma/client";
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 
 interface Request{
     buyerId: string,
@@ -52,6 +52,11 @@ class CreateSaleService {
             totalValue
 
         })
+
+        const newQuantity = (findProduct.quantity-quantity)
+
+        productsRepository.update(productId, newQuantity)
+
         return sale
     }
 }

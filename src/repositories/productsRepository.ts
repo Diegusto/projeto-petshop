@@ -75,6 +75,15 @@ class ProductsRepository {
         return products
     }
 
+    public async delete (id:number): Promise<products>{
+        const products = await prisma.products.delete({
+            where:{
+                id
+            }
+        })
+        return products
+    }
+
 
 }
 

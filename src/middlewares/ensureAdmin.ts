@@ -1,6 +1,6 @@
 import { UsersRepository } from '../repositories/usersRepository';
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../AppError';
+import { AppError } from '../error/AppError';
 
 const usersRepository = new UsersRepository();
 

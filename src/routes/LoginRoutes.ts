@@ -2,10 +2,17 @@ import { Router } from "express";
 import { UsersRepository } from "../repositories/usersRepository";
 import {sign} from "jsonwebtoken";
 import { compare } from "bcryptjs";
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 import { verify } from "jsonwebtoken";
 
 const loginRouter = Router();
+
+interface ITokenPayload {
+    iat: number;
+    exp: number;
+    sub: string;
+}  
+
 
 loginRouter.post('/', async (request,response) =>{
     const {
@@ -29,11 +36,11 @@ loginRouter.post('/', async (request,response) =>{
         throw new AppError('wrong password',401)
     }
 
-    const secrect = process.env.TOKEN_KEY
+    const secret = process.env.TOKEN_KEY
 
     const refresh = process.env.REFRESH_KEY
 
-    if (!secrect){
+    if (!secret){
         throw new AppError('user not found', 401)
     }
 
@@ -41,7 +48,7 @@ loginRouter.post('/', async (request,response) =>{
         throw new AppError('user not found', 401)
     }
 
-    const token = sign({}, secrect, {
+    const token = sign({}, secret, {
         subject: findUser.id,
         expiresIn: "1d"
     })
@@ -74,17 +81,22 @@ loginRouter.post('/refresh', async (request,response) =>{
     }
 
     const [, refresh] = authHeader.split(' ');
-    console.log(refresh)
 
     try {
         const tokenDecoded = verify(refresh, refToken);
+
+        const {sub} = tokenDecoded as ITokenPayload
+
+        const token = sign({}, secret, {
+            subject: sub,
+            expiresIn: "1d"
+        })
+
+        return response.status(200).json(token)
+
     } catch {
         throw new AppError('invalid token', 401)
     }
-
-    const [, token] = authHeader.split (' ');
-
-    return response.status(200).json(token)
 
 })
 

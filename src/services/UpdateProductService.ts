@@ -1,5 +1,5 @@
 import { ProductsRepository } from "../repositories/productsRepository";
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 
 interface Request{
     productId: number,

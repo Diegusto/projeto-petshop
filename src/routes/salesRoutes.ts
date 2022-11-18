@@ -4,7 +4,7 @@ import { CreateSaleService } from "../services/CreateSaleService";
 import { ProductsRepository } from "../repositories/productsRepository";
 import { SalesRepository } from "../repositories/salesRepository";
 import { UsersRepository } from "../repositories/usersRepository";
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 
 const SalesRouter = Router()
 

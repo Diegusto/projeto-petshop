@@ -5,6 +5,7 @@ import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { UsersRepository } from "../repositories/usersRepository";
 import { UpdateProductService } from "../services/UpdateProductService";
 import { ensureAdmin } from "../middlewares/ensureAdmin";
+import { AppError } from "../error/AppError";
 
 const ProductRouter = Router();
 
@@ -70,6 +71,22 @@ ProductRouter.put('/update', async (request, response) =>{
     } catch (error) {
         return response.status(400).json('update failed')
     }
+
+})
+
+ProductRouter.delete('/delete', async (request, response) => {
+    const {
+        productId
+    } = request.body
+
+    const productsRepository = new ProductsRepository();
+try {
+    const remove = await productsRepository.delete(productId)
+    console.log(remove)
+    return response.status(200).json(`produte ${remove}, removido com sucesso`)
+} catch (error) {
+    throw new AppError('delete failed')
+}
 
 })
 

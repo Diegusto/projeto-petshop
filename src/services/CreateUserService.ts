@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 import { users } from "@prisma/client";
 
 import { UsersRepository } from "../repositories/usersRepository"
-import { AppError } from "../AppError";
+import { AppError } from "../error/AppError";
 
 interface Request{
     name:string,

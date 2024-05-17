@@ -36,7 +36,11 @@ class CreateUserService{
             
         }
 
+        console.log("to aqui1")
+
         const encryptedPassword = await hash(password, 10)
+
+        console.log("to aqui2")
 
         const user: IUser = await usersRepository.create({
             name,
@@ -45,6 +49,8 @@ class CreateUserService{
             password:encryptedPassword,
             type
         })
+
+        console.log("toaqui3")
 
         delete user.password
 

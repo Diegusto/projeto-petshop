@@ -5,7 +5,7 @@ import { UsersRepository } from "../repositories/usersRepository";
 import { AppError } from "../error/AppError";
 const userRouter = Router();
 
-userRouter.use(ensureAuthenticated)
+//userRouter.use(ensureAuthenticated)
 
 userRouter.post('/', async (request, response)=>{
     const {
@@ -32,6 +32,7 @@ userRouter.post('/', async (request, response)=>{
         throw new AppError('user type invalid')
     }
 
+    console.log("cheguei")
     const createUserService = new CreateUserService();
 
     try {

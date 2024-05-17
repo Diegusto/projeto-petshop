@@ -34,11 +34,13 @@ class UsersRepository {
     }
 
     public async FindByDocument(document:string): Promise<users | null>{
+        console.log("entrei")
         const findUser = await prisma.users.findFirst({
             where: {
                 document
             }
         })
+        console.log("passei")
         return findUser
     }
 

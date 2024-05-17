@@ -7,6 +7,7 @@ import { verify } from "jsonwebtoken";
 
 const loginRouter = Router();
 
+
 interface ITokenPayload {
     iat: number;
     exp: number;
@@ -20,11 +21,9 @@ loginRouter.post('/', async (request,response) =>{
         password
     } =request.body;
 
-
     const usersRepository = new UsersRepository();
 
     const findUser = await usersRepository.FindByDocument(document);
-
     if (!findUser){
         throw new AppError('user not found',401)
     }

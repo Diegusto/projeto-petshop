@@ -1,20 +1,17 @@
 import { SalesRepository } from "../repositories/salesRepository";
 import {ProductsRepository} from "../repositories/productsRepository";
-import { status } from "@prisma/client";
+import { ItemsRepository } from "../repositories/itemsRepository";
 import { AppError } from "../error/AppError";
 
 interface Request{
     buyerId: string,
-    productId: number,
-    quantity: number
+    products: number[]
 
 }
 
 interface Response{
     id:number,
     buyerId:string,
-    productId:number,
-    status:status,
     dueDate:Date,
     totalValue: number
 }
@@ -22,40 +19,46 @@ interface Response{
 class CreateSaleService {
     public async execute({
         buyerId,
-        productId,
-        quantity,
+        products,
     }: Request): Promise<Response>{
         const productsRepository = new ProductsRepository();
-        const findProduct = await productsRepository.FindById(productId);
 
-        if (!findProduct){
-            throw new AppError('product not found')
-        }
+        let totalValue = 0
 
-        let status:status = 'pending'
-
-        if (findProduct.quantity < quantity){
-            status = 'order'
-        }
-
-        const totalValue = (findProduct.price * quantity);
 
         const dueDate = new Date(new Date().setMonth(new Date().getMonth()+1))
 
         const salesRepository = new SalesRepository();
 
+        const itemsRepository = new ItemsRepository();
+        
+        for(let i = 0; i < products.length;i++){
+            const findProduct = await productsRepository.FindById(products[i]);
+            if (!findProduct){
+                throw new AppError('product not found')
+            }
+            totalValue = (totalValue + findProduct.price);
+        }
+
         const sale = await salesRepository.create({
             buyerId,
-            productId,
-            status,
             dueDate,
             totalValue
 
         })
 
-        const newQuantity = (findProduct.quantity-quantity)
+        
+        for(let i = 0; i < products.length;i++){
+            const findProduct = await productsRepository.FindById(products[i]);
+            if (!findProduct){
+                throw new AppError('product not found')
+            }
+            const items = await itemsRepository.create({
+                saleId: sale.id,
+                ProductId: products[i]
+            })
 
-        productsRepository.update(productId, newQuantity)
+        }
 
         return sale
     }

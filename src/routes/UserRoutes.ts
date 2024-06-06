@@ -17,11 +17,11 @@ userRouter.post('/', async (request, response)=>{
     } = request.body;
 
 
-    const {id} = request.user
+    //const {id} = request.user
 
     const usersRepository = new UsersRepository();
 
-    const findUser = await usersRepository.FindById(id)
+    /*const findUser = await usersRepository.FindById(id)
     if (findUser){
         if (!findUser.type.includes('master')){
             if (type.includes('master') || type.includes('admin')){
@@ -30,7 +30,7 @@ userRouter.post('/', async (request, response)=>{
         }
     }else if (type.includes('master') || type.includes('admin')){
         throw new AppError('user type invalid')
-    }
+    }*/
 
     console.log("cheguei")
     const createUserService = new CreateUserService();

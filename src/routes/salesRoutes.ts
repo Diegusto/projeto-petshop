@@ -12,20 +12,23 @@ SalesRouter.use(ensureAuthenticated)
 
 SalesRouter.post('/create', async (request, response) =>{
     const {
-        productId,
-        quantity
+        products
     } = request.body;
 
     const {id} = request.user
 
-    console.log(id)
+    const usersRepository = new UsersRepository();
+    const findUser = await usersRepository.FindById(id)
+
+    if (!findUser){
+        throw new AppError('user not found', 401)
+    }
 
     const createSaleService = new CreateSaleService();
     try {
         const sale = await createSaleService.execute({
             buyerId:id,
-            productId,
-            quantity
+            products
         })
 
         return response.status(200).json(sale)
@@ -38,12 +41,12 @@ SalesRouter.post('/create', async (request, response) =>{
 
 SalesRouter.get('/search', async (request, response) =>{
     const {
-        brand
+        type
     } = request.body;
 
     const productsRepository = new ProductsRepository();
 
-    const products = await productsRepository.ListbyBrand(brand);
+    const products = await productsRepository.ListbyType(type);
 
 
     return response.status(200).json(products)
@@ -61,7 +64,7 @@ SalesRouter.get('/list', async (request, response) =>{
     const findUser = await usersRepository.FindById(id)
 
     if (!findUser){
-        throw new AppError('user not found')
+        throw new AppError('user not found', 401)
     }
 
     if (!findUser.type.includes('master')){
@@ -70,30 +73,11 @@ SalesRouter.get('/list', async (request, response) =>{
 
     const salesRepository = new SalesRepository();
 
-    const sales = await salesRepository.listByStatus(status)
+    const sales = await salesRepository.List
 
     return response.status(200).json(sales)
 })
 
-SalesRouter.put('/update', async (request, response) =>{
-    const {
-        id,
-        status
-    } = request.body;
-
-    const salesRepository = new SalesRepository();
-
-    const findSale = salesRepository.FindById(id)
-
-    if (!findSale){
-        throw new AppError('sale not found')
-    }
-
-    const sale = await salesRepository.UpdateStatus(id, status)
-
-    return response.status(200).json(sale)
-
-})
 
 
 export {SalesRouter}

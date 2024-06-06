@@ -4,9 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "DATABASE_URL"
-
-
+  url      = env("DATABASE_URL")
 }
 
 model products {
@@ -14,20 +12,17 @@ model products {
   name        String
   description String
   price       Int
-  quantity    Int
-  brand       String
-  sale        sales[]
+  type        String
+  item        items[]
 }
 
 model sales {
   id         Int      @id @default(autoincrement())
   buyerId    String
-  productId  Int
-  status     status
   dueDate    DateTime
   totalValue Int
+  item       items[]
   user       users    @relation(fields: [buyerId], references: [id])
-  product    products @relation(fields: [productId], references: [id])
 }
 
 model users {
@@ -40,9 +35,27 @@ model users {
   sale     sales[]
 }
 
+model items {
+  id        Int      @id @default(autoincrement())
+  saleId    Int
+  ProductId Int
+  product   products @relation(fields: [ProductId], references: [id])
+  sale      sales    @relation(fields: [saleId], references: [id])
+}
+
 enum status {
   order
   paid
   pending
   canceled
+}
+
+enum types {
+  cat
+  dog
+  fish
+  bird
+  rat
+  reptile
+  exotic
 }

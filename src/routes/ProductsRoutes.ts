@@ -9,8 +9,8 @@ import { AppError } from "../error/AppError";
 
 const ProductRouter = Router();
 
-ProductRouter.use(ensureAuthenticated)
-ProductRouter.use(ensureAdmin)
+//ProductRouter.use(ensureAuthenticated)
+//ProductRouter.use(ensureAdmin)
 
 const usersRepository = new UsersRepository();
 
@@ -19,8 +19,7 @@ ProductRouter.post('/create', async (request, response) =>{
         name,
         description,
         price,
-        quantity,
-        brand
+        type
     } = request.body;
     
     const createProductService = new CreateProductService();
@@ -29,8 +28,7 @@ ProductRouter.post('/create', async (request, response) =>{
             name,
             description,
             price,
-            quantity,
-            brand
+            type
         })
         return response.status(200).json(product)
     } catch (error) {
@@ -49,12 +47,23 @@ ProductRouter.get('/list', async (request, response) =>{
     return response.status(200).json(products)
 })
 
+ProductRouter.post('/listtype', async (request, response) =>{
+    const {
+        type
+    } = request.body;
+
+    const productsRepository = new ProductsRepository();
+
+    const products = await productsRepository.ListbyType(type);
+
+    return response.status(200).json(products)
+})
+
 
 
 ProductRouter.put('/update', async (request, response) =>{
     const {
         productId,
-        quantity,
         price
     } = request.body
 
@@ -63,7 +72,6 @@ ProductRouter.put('/update', async (request, response) =>{
     try {
         const product = await updateProductService.execute({
             productId,
-            quantity,
             price
         })
         return response.status(200).json(product)
@@ -82,7 +90,6 @@ ProductRouter.delete('/delete', async (request, response) => {
     const productsRepository = new ProductsRepository();
 try {
     const remove = await productsRepository.delete(productId)
-    console.log(remove)
     return response.status(200).json(`produte ${remove}, removido com sucesso`)
 } catch (error) {
     throw new AppError('delete failed')

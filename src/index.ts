@@ -1,4 +1,5 @@
 import express, {Request, Response, NextFunction} from 'express';
+import cors from 'cors';
 import 'express-async-errors';
 import { AppError } from './error/AppError';
 
@@ -6,7 +7,9 @@ import routes from './routes/routes';
 
 const app = express()
 
+app.use(cors());
 app.use(express.json())
+
 
 const port = process.env.PORT || 3000
 

@@ -57,7 +57,8 @@ loginRouter.post('/', async (request,response) =>{
         expiresIn: "10d"
     })
 
-    return response.status(200).json({token, refreshToken})
+    const type = findUser.type
+    return response.status(200).json({token, refreshToken,type})
 
 })
 
@@ -91,7 +92,7 @@ loginRouter.post('/refresh', async (request,response) =>{
             expiresIn: "1d"
         })
 
-        return response.status(200).json(token)
+        return response.status(200).json(token,)
 
     } catch {
         throw new AppError('invalid token', 401)

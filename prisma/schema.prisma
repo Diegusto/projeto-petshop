@@ -32,6 +32,7 @@ model users {
   password String
   type     String
   email    String
+  ativo Int
   sale     sales[]
 }
 

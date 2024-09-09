@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { CreateUserService } from "../services/CreateUserService";
 import { UsersRepository } from "../repositories/usersRepository";
 import { AppError } from "../error/AppError";
@@ -12,6 +11,7 @@ userRouter.post('/', async (request, response)=>{
         name,
         document,
         email,
+        ativo,
         password,
         type
     } = request.body;
@@ -32,7 +32,6 @@ userRouter.post('/', async (request, response)=>{
         throw new AppError('user type invalid')
     }*/
 
-    console.log("cheguei")
     const createUserService = new CreateUserService();
 
     try {
@@ -41,6 +40,7 @@ userRouter.post('/', async (request, response)=>{
             name,
             document,
             email,
+            ativo,
             password,
             type
         })
@@ -54,6 +54,30 @@ userRouter.post('/', async (request, response)=>{
 
     
 
+})
+
+userRouter.get('/list', async (request, response) =>{
+    
+
+    const usersRepository = new UsersRepository();
+
+    const users = await usersRepository.List();
+
+    return response.status(200).json(users)
+})
+
+userRouter.post('/delete', async (request, response) =>{
+    const {
+        document
+    } = request.body;
+
+
+
+    const usersRepository = new UsersRepository();
+
+    const users = await usersRepository.delete(document);
+
+    return response.status(200).json(users)
 })
 
 export {userRouter}

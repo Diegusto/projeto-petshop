@@ -3,8 +3,7 @@ import { AppError } from "../error/AppError";
 
 interface Request{
     productId: number,
-    quantity?: number,
-    price?:number
+    price:number
 }
 
 interface Response{
@@ -12,29 +11,25 @@ interface Response{
     name: string,
     description: string,
     price: number,
-    quantity: number,
-    brand: string
+    type: string
 }
 
 class UpdateProductService{
     public async execute({
         productId,
-        quantity,
         price
     }:Request): Promise<Response>{
         const productsRepository = new ProductsRepository();
 
+        console.log("cheguei")
+        console.log(productId)
         const findProduct = await productsRepository.FindById(productId);
         if (!findProduct){
+            console.log("nãoa chei")
             throw new AppError('product not found')
         }
-
-        if (!quantity){
-            quantity = 0
-        }
-
-        const newQuantity = findProduct.quantity + quantity
-        const product = await productsRepository.update(productId, newQuantity, price)
+        console.log("achei")
+        const product = await productsRepository.update(productId, price)
 
         return product
     }

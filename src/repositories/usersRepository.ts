@@ -8,6 +8,7 @@ interface ICreateUser{
     document:string,
     email:string,
     type:string,
+    ativo:number,
     password:string
 }
 
@@ -18,6 +19,7 @@ class UsersRepository {
         document,
         email,
         type,
+        ativo,
         password
     }: ICreateUser): Promise<users> {
         const user = await prisma.users.create({
@@ -27,6 +29,7 @@ class UsersRepository {
                 document,
                 email,
                 type,
+                ativo,
                 password
             },
         });
@@ -34,13 +37,11 @@ class UsersRepository {
     }
 
     public async FindByDocument(document:string): Promise<users | null>{
-        console.log("entrei")
         const findUser = await prisma.users.findFirst({
             where: {
                 document
             }
         })
-        console.log("passei")
         return findUser
     }
 
@@ -52,8 +53,31 @@ class UsersRepository {
         })
         return findUser
     }
+    
+    public async List (): Promise<users[]>{
+        const users = await prisma.users.findMany({
+            orderBy:{
+                id: 'desc'
+            }
+        })
 
+        return users
+    }
+    public async delete (document:string): Promise<users>{
+        console.log(document)
+        const products = await prisma.users.update({
+            where:{
+                document
+            },
+            data:{
+                ativo: 1
+            }
+        })
+        return products
+    }
 
 }
+
+
 
 export {UsersRepository}

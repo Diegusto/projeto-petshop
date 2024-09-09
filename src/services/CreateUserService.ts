@@ -9,6 +9,7 @@ interface Request{
     name:string,
     document:string,
     email:string,
+    ativo:number
     password:string,
     type:string
 }
@@ -25,6 +26,7 @@ class CreateUserService{
         name,
         document,
         email,
+        ativo,
         password,
         type
     }: Request): Promise<IUser>{
@@ -46,6 +48,7 @@ class CreateUserService{
             name,
             document,
             email,
+            ativo,
             password:encryptedPassword,
             type
         })

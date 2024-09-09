@@ -30,6 +30,7 @@ class ProductsRepository {
 
 
     public async FindById (id:number): Promise<products | null>{
+        console.log(id)
         const product =await prisma.products.findFirst({
             where:{
                 id
@@ -65,6 +66,18 @@ class ProductsRepository {
         const products = await prisma.products.delete({
             where:{
                 id
+            }
+        })
+        return products
+    }
+
+    public async update (id:number,price:number): Promise<products>{
+        const products = await prisma.products.update({
+            where:{
+                id
+            },
+            data:{
+                price
             }
         })
         return products

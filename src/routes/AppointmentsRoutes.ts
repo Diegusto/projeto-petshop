@@ -14,7 +14,7 @@ AppointmentsRouter.post('/create', async (request, response) =>{
     const {
         petId,
         serviceId,
-        date
+        
 
     } = request.body;
 
@@ -34,7 +34,7 @@ AppointmentsRouter.post('/create', async (request, response) =>{
             clientId:id,
             petId,
             serviceId,
-            date
+            //date
         })
 
         return response.status(200).json(appointment)

@@ -7,7 +7,7 @@ interface Request{
     clientId: string,
     petId: number,
     serviceId: number,
-    date: Date
+    //date: Date
 }
 
 interface Response {
@@ -25,8 +25,9 @@ class CreateAppointmentService{
         clientId,
         petId,
         serviceId,
-        date
     }: Request): Promise<Response> {
+
+        const dueDate = new Date(new Date().setMonth(new Date().getMonth()+1));
 
         const appointmentsRepository = new AppointmentsRepository();
         const usersRepository = new UsersRepository();
@@ -50,7 +51,7 @@ class CreateAppointmentService{
             petId,
             serviceId,
             price,
-            date
+            date: dueDate
         })
         return appointment
     }

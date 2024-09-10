@@ -6,11 +6,11 @@ import { AppointmentsRepository } from "../repositories/appointmentsRepository";
 import { UsersRepository } from "../repositories/usersRepository";
 import { AppError } from "../error/AppError";
 
-const SalesRouter = Router()
+const AppointmentsRouter = Router()
 
-SalesRouter.use(ensureAuthenticated)
+AppointmentsRouter.use(ensureAuthenticated)
 
-SalesRouter.post('/create', async (request, response) =>{
+AppointmentsRouter.post('/create', async (request, response) =>{
     const {
         petId,
         serviceId,
@@ -45,10 +45,7 @@ SalesRouter.post('/create', async (request, response) =>{
    
 })
 
-SalesRouter.get('/list', async (request, response) =>{
-    const {
-        type
-    } = request.body;
+AppointmentsRouter.get('/list', async (request, response) =>{
 
     const {id} = request.user
 
@@ -72,7 +69,7 @@ SalesRouter.get('/list', async (request, response) =>{
     return response.status(200).json(appointments)
 })
 
-SalesRouter.get('/listUser', async (request, response) =>{
+AppointmentsRouter.get('/listUser', async (request, response) =>{
 
     const {id} = request.user
     
@@ -91,7 +88,7 @@ SalesRouter.get('/listUser', async (request, response) =>{
     return response.status(200).json(appointments)
 })
 
-SalesRouter.post('/listUser', async (request, response) =>{
+AppointmentsRouter.post('/listUser', async (request, response) =>{
     const {
         petId
     } = request.body;
@@ -105,4 +102,4 @@ SalesRouter.post('/listUser', async (request, response) =>{
 
 
 
-export {SalesRouter}
+export {AppointmentsRouter}

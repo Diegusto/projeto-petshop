@@ -17,20 +17,22 @@ userRouter.post('/', async (request, response)=>{
     } = request.body;
 
 
-    //const {id} = request.user
+    
 
     const usersRepository = new UsersRepository();
 
-    /*const findUser = await usersRepository.FindById(id)
-    if (findUser){
-        if (!findUser.type.includes('master')){
-            if (type.includes('master') || type.includes('admin')){
+    if (type.includes('func') || type.includes('admin') || type.includes('master')){
+        const {id} = request.user
+        const findUser = await usersRepository.FindById(id)
+        if (findUser){
+            if (!findUser.type.includes('master') || !findUser.type.includes('admin')){
                 throw new AppError('user type invalid')
             }
+        }else if (type.includes('master') || type.includes('admin')){
+            throw new AppError('user type invalid')
         }
-    }else if (type.includes('master') || type.includes('admin')){
-        throw new AppError('user type invalid')
-    }*/
+    }
+    
 
     const createUserService = new CreateUserService();
 

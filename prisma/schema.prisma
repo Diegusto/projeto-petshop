@@ -25,6 +25,33 @@ model sales {
   user       users    @relation(fields: [buyerId], references: [id])
 }
 
+model pets {
+  id        Int       @id @default(autoincrement())
+  userId    String
+  name      String
+  type      String
+  user      users     @relation(fields: [userId], references: [id])
+}
+
+model services {
+  id        Int       @id default(autoincrement())
+  type      String
+  price     Int
+}
+
+model appointments {
+  id        Int       @id default(autoincrement())
+  funcId    String
+  clientId  String
+  petId     String
+  serviceId String
+  price     String
+  date      DateTime
+  client    users   @relation(fields: [clientId], references: [id])
+  pet       pets    @relation(fields: [petId], references: [id])
+  func      users   @relation(fields: [funcId], references: [id])
+}
+
 model users {
   id       String  @id @default(uuid())
   name     String

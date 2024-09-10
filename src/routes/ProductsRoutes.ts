@@ -9,8 +9,8 @@ import { AppError } from "../error/AppError";
 
 const ProductRouter = Router();
 
-//ProductRouter.use(ensureAuthenticated)
-//ProductRouter.use(ensureAdmin)
+ProductRouter.use(ensureAuthenticated)
+ProductRouter.use(ensureAdmin)
 
 const usersRepository = new UsersRepository();
 

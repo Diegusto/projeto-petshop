@@ -75,6 +75,14 @@ class UsersRepository {
         })
         return products
     }
+    public async FindByType (type:string): Promise<users | null>{
+        const findUser = await prisma.users.findFirst({
+            where:{
+                type
+            }
+        })
+        return findUser
+    }
 
 }
 

@@ -48,6 +48,4 @@ PetRouter.get('/list', async (request, response) =>{
 })
 
 
-
-
 export {PetRouter}

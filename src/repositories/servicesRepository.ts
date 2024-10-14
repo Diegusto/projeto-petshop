@@ -31,7 +31,7 @@ class ServicesRepository{
         })
         return service
     }
-    public async List (): Promise<services | null>{
+    public async List (): Promise<services[] | null>{
     
         const service = await prisma.services.findMany({
             orderBy:{

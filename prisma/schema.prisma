@@ -8,12 +8,14 @@ datasource db {
 }
 
 model products {
-  id          Int     @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
   description String
   price       Int
   type        String
   item        items[]
+  stock       stock[]
+  supplier    suppliers[]
 }
 
 model sales {
@@ -26,46 +28,45 @@ model sales {
 }
 
 model appointments {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   funcId    String
   clientId  String
   petId     Int
   serviceId String
   price     String
   date      DateTime
-  client    users   @relation("client", fields: [clientId], references: [id])
-  pet       pets    @relation(fields: [petId], references: [id])
-  func      users   @relation("func", fields: [funcId], references: [id])
+  client    users    @relation("client", fields: [clientId], references: [id])
+  pet       pets     @relation(fields: [petId], references: [id])
+  func      users    @relation("func", fields: [funcId], references: [id])
 }
 
 model pets {
-  id        Int       @id @default(autoincrement())
-  userId    String
-  name      String
-  type      String
-  user      users     @relation(fields: [userId], references: [id])
+  id           Int            @id @default(autoincrement())
+  userId       String
+  name         String
+  type         String
+  user         users          @relation(fields: [userId], references: [id])
   appointments appointments[]
 }
 
 model services {
-  id        Int       @id @default(autoincrement())
-  type      String
-  price     Int
+  id    Int    @id @default(autoincrement())
+  type  String
+  price Int
 }
 
 model users {
-  id       String  @id @default(uuid())
+  id       String         @id @default(uuid())
   name     String
-  document String  @unique
+  document String         @unique
   password String
   type     String
   email    String
-  ativo Int
+  ativo    Int
   sale     sales[]
-  func appointments[] @relation("func")
-  client appointments[] @relation("client")
-  pets pets[]
-
+  func     appointments[] @relation("func")
+  client   appointments[] @relation("client")
+  pets     pets[]
 }
 
 model items {
@@ -74,6 +75,29 @@ model items {
   ProductId Int
   product   products @relation(fields: [ProductId], references: [id])
   sale      sales    @relation(fields: [saleId], references: [id])
+}
+
+model stock {
+  id             Int      @id @default(autoincrement())
+  productId      Int
+  quantity       Int
+  expirationDate DateTime
+  product        products @relation(fields: [productId], references: [id])
+}
+
+model suppliers {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  name      String
+  phone     String
+  product   products @relation(fields: [productId], references: [id])
+}
+
+model finances {
+  id          Int       @id @default(autoincrement())
+  Value       Int
+  date        DateTime
+  description String
 }
 
 enum status {

@@ -64,7 +64,7 @@ class AppointmentsRepository {
         return appointments
     }
 
-    public async listByPet(petId:string): Promise<appointments[]>{
+    public async listByPet(petId:number): Promise<appointments[]>{
         const appointments = await prisma.appointments.findMany({
             where:{
                 petId

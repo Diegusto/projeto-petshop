@@ -32,8 +32,8 @@ model appointments {
   funcId    String
   clientId  String
   petId     Int
-  serviceId String
-  price     String
+  serviceId Int
+  price     Int
   date      DateTime
   client    users    @relation("client", fields: [clientId], references: [id])
   pet       pets     @relation(fields: [petId], references: [id])

@@ -73,6 +73,18 @@ class AppointmentsRepository {
         return appointments
     }
 
+    public async listByMonth(date1:Date,date2:Date): Promise<appointments[]>{
+        const appointments = await prisma.appointments.findMany({
+            where:{
+                date:{
+                    gte:date1,
+                    lte:date2
+                }
+            }
+        })
+        return appointments
+    }
+
 }
 
 export {AppointmentsRepository}

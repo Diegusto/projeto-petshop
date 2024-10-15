@@ -4,21 +4,21 @@ const prisma = new PrismaClient();
 
 interface ISales{
     buyerId: string,
-    dueDate: Date,
+    date: Date,
     totalValue: number
 }
 
 class SalesRepository{
     public async create({
         buyerId,
-        dueDate,
+        date,
         totalValue
 
     }:ISales): Promise<sales>{
         const sale = await prisma.sales.create({
             data:{
                 buyerId,
-                dueDate,
+                date,
                 totalValue
             }
         })
@@ -33,6 +33,19 @@ class SalesRepository{
             }
         })
         
+        return sales
+    }
+
+    public async ListByMonth (date1:Date,date2:Date): Promise<sales[]>{
+        const sales = await prisma.sales.findMany({
+            where:{
+                date:{
+                    gte:date1,
+                    lte:date2
+                }
+            }
+        })
+
         return sales
     }
 

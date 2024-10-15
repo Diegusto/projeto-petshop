@@ -24,6 +24,8 @@ SalesRouter.post('/create', async (request, response) =>{
         throw new AppError('user not found', 401)
     }
 
+
+
     const createSaleService = new CreateSaleService();
     try {
         const sale = await createSaleService.execute({

@@ -12,6 +12,7 @@ AppointmentsRouter.use(ensureAuthenticated)
 
 AppointmentsRouter.post('/create', async (request, response) =>{
     const {
+        funcId,
         petId,
         serviceId,
         
@@ -32,9 +33,10 @@ AppointmentsRouter.post('/create', async (request, response) =>{
     try {
         const appointment = await createAppointmentService.execute({
             clientId:id,
+            funcId,
             petId,
             serviceId,
-            //date
+            
         })
 
         return response.status(200).json(appointment)

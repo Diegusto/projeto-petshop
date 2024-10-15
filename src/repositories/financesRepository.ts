@@ -25,7 +25,7 @@ class FinancesRepository{
         return finances
     }
 
-    public async listByMonth(date1:Date, date2:Date): Promise<finances[]>{
+    public async listByDate(date1:Date, date2:Date): Promise<finances[]>{
         const finances = await prisma.finances.findMany({
             where:{
                 date:{

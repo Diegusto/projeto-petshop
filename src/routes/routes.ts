@@ -7,6 +7,7 @@ import { SalesRouter } from "./salesRoutes";
 import { ServiceRouter } from "./ServicesRoutes";
 import { PetRouter } from "./PetsRoutes";
 import { AppointmentsRouter } from "./AppointmentsRoutes";
+import { FinancesRouter } from "./FinancesRoutes";
 
 const routes = Router();
 
@@ -17,5 +18,6 @@ routes.use('/sales', SalesRouter)
 routes.use('/services', ServiceRouter)
 routes.use('/pets', PetRouter)
 routes.use('/appointments', AppointmentsRouter)
+routes.use('/finances',FinancesRouter)
 
 export default routes;

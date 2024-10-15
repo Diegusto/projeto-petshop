@@ -5,9 +5,9 @@ import { ServicesRepository } from "../repositories/servicesRepository";
 
 interface Request{
     clientId: string,
+    funcId: string,
     petId: number,
     serviceId: number,
-    //date: Date
 }
 
 interface Response {
@@ -23,21 +23,17 @@ interface Response {
 class CreateAppointmentService{
     public async execute({
         clientId,
+        funcId,
         petId,
         serviceId,
     }: Request): Promise<Response> {
 
-        const dueDate = new Date(new Date().setMonth(new Date().getMonth()+1));
+        const date = new Date(new Date().setDate(new Date().getDate()+7));
 
         const appointmentsRepository = new AppointmentsRepository();
         const usersRepository = new UsersRepository();
         const servicesRepository = new ServicesRepository();
 
-        const FindUser = await usersRepository.FindByType("func");
-        if (!FindUser){
-            throw new AppError('no worker found')
-        }
-        const funcId = FindUser.id
 
         const FindService = await servicesRepository.FindById(serviceId);
         if (!FindService){
@@ -51,7 +47,7 @@ class CreateAppointmentService{
             petId,
             serviceId,
             price,
-            date: dueDate
+            date
         })
         return appointment
     }

@@ -9,7 +9,6 @@ import { AppError } from "../error/AppError";
 const PetRouter = Router();
 
 PetRouter.use(ensureAuthenticated)
-PetRouter.use(ensureAdmin)
 
 const usersRepository = new UsersRepository();
 

@@ -28,7 +28,10 @@ class StockRepository{
     public async listByProduct(productId:number): Promise<stock[]>{
         const stock = await prisma.stock.findMany({
             where:{
-                productId
+                productId,
+                quantity:{
+                    gt: 0
+                }
             }
         })
         return stock
@@ -55,6 +58,20 @@ class StockRepository{
         return stock
     }
 
+    public async ListByDate (productId:number): Promise<stock | null>{
+        const stock = await prisma.stock.findFirst({
+            where:{
+                productId,
+                quantity:{
+                    gt: 0
+                }
+            },
+            orderBy:{
+                expirationDate: 'asc'
+            }
+        })
+        return stock
+    }
 
 
 }
